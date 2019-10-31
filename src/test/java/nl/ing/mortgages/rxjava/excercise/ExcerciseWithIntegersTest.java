@@ -3,7 +3,8 @@ package nl.ing.mortgages.rxjava.excercise;
 import io.reactivex.rxjava3.core.Observable;
 import nl.ing.mortgages.rxjava.Observables;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,12 +14,13 @@ class ExcerciseWithIntegersTest {
 
     @BeforeEach
     void setUp() {
-        integers = Observables.integers();
         excercise = new ExcerciseWithIntegers();
     }
 
-    @Test
-    void shouldCountHundredEvents() {
-        assertEquals(100, excercise.countNumberOfEvents(integers));
+    @ParameterizedTest
+    @ValueSource(ints = { 10, 20, 50, 100 })
+    void shouldCountHundredEvents(int expectedCount) {
+        integers = Observables.integers(expectedCount);
+        assertEquals(expectedCount, excercise.countNumberOfEvents(integers));
     }
 }
