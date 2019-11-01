@@ -3,6 +3,7 @@ package nl.ing.mortgages.rxjava.excercise;
 import io.reactivex.rxjava3.core.Observable;
 import nl.ing.mortgages.rxjava.Observables;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -38,5 +39,17 @@ class ExcerciseWithIntegersTest {
         integers = Observables.integers(numberOfInputs);
         Integer expectedResult = (numberOfInputs/2) * ((numberOfInputs/2) - 1);
         excercise.getSumOfEvenNumbers(integers).test().assertValue(expectedResult);
+    }
+
+    @Test
+    void shouldHaveASequenceOfCountsUpToInput() {
+        integers = Observables.integers(4);
+        excercise.getSequenceOfCountingUpToEachInteger(integers).test().assertResult(0,0,1,0,1,2,0,1,2,3);
+    }
+
+    @Test
+    void shouldHaveASequenceOfCountsUpToInput_NotStartingAtZero() {
+        integers = Observable.range(3, 3);
+        excercise.getSequenceOfCountingUpToEachInteger(integers).test().assertResult(0,1,2,3,0,1,2,3,4,0,1,2,3,4,5);
     }
 }
