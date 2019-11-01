@@ -31,4 +31,12 @@ class ExcerciseWithIntegersTest {
         excercise.getEvenNumbers(integers).test().assertValueCount(numberOfInputs / 2);
         excercise.getEvenNumbers(integers).all(x -> x % 2 == 0).test().assertValue(true);
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 10, 20, 50, 100 })
+    void shouldCalculateTheSumOfAllEvenNumbers(int numberOfInputs) {
+        integers = Observables.integers(numberOfInputs);
+        Integer expectedResult = (numberOfInputs/2) * ((numberOfInputs/2) - 1);
+        excercise.getSumOfEvenNumbers(integers).test().assertValue(expectedResult);
+    }
 }
