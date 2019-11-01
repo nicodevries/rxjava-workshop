@@ -1,6 +1,8 @@
 package nl.ing.mortgages.rxjava.excercise;
 
+import io.reactivex.rxjava3.core.Notification;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.observers.TestObserver;
 import io.reactivex.rxjava3.schedulers.TestScheduler;
 import nl.ing.mortgages.rxjava.Observables;
@@ -9,10 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ExcerciseWithTimeTest {
     private ExcerciseWithTime excercise;
@@ -24,8 +23,10 @@ class ExcerciseWithTimeTest {
     void setUp() {
         excercise = new ExcerciseWithTime();
         scheduler = new TestScheduler();
-        fasterSource = Observables.interval(1, scheduler).take(10);
-        slowerSource = Observables.interval(3, scheduler).map(x -> x + 100).take(3);
+        int fastPeriod = 1;
+        int slowPeriod = 3;
+        fasterSource = Observables.interval(fastPeriod, scheduler).doOnEach(logForSource(1, fastPeriod)).take(10);
+        slowerSource = Observables.interval(slowPeriod, scheduler).doOnEach(logForSource(2, slowPeriod)).map(x -> x + 100).take(3);
     }
 
     @Test
@@ -35,5 +36,20 @@ class ExcerciseWithTimeTest {
         scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
 
         observer.assertValueSequence(LongStream.range(0, 10).boxed().collect(Collectors.toList()));
+    }
+
+    @Test
+    void shouldSumItemsWithTheSameIndex() {
+        TestObserver<Long> observer = excercise.sumItemsWithTheSameIndex(fasterSource, slowerSource).test();
+
+        scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
+
+        observer.assertResult(100L,102L,104L);
+    }
+
+    private Consumer<Notification<Long>> logForSource(int sourceNumber, int period) {
+        return x -> System.out.println(
+                String.format("Source %d - %d seconds : %d", sourceNumber, (x.getValue() + 1) * period, x.getValue())
+        );
     }
 }
