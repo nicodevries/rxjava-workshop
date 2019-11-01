@@ -25,8 +25,8 @@ class ExcerciseWithTimeTest {
         scheduler = new TestScheduler();
         int fastPeriod = 1;
         int slowPeriod = 3;
-        fasterSource = Observables.interval(fastPeriod, scheduler).doOnEach(logForSource(1, fastPeriod)).take(10);
-        slowerSource = Observables.interval(slowPeriod, scheduler).doOnEach(logForSource(2, slowPeriod)).map(x -> x + 100).take(3);
+        fasterSource = Observables.interval(fastPeriod, scheduler).doOnEach(logForSource(1, fastPeriod)).take(10).doOnEach(System.out::println);
+        slowerSource = Observables.interval(slowPeriod, scheduler).doOnEach(logForSource(2, slowPeriod)).map(x -> x + 100).take(3).doOnEach(System.out::println);
     }
 
     @Test
@@ -45,6 +45,15 @@ class ExcerciseWithTimeTest {
         scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
 
         observer.assertResult(100L,102L,104L);
+    }
+
+    @Test
+    void shouldSumLastItemFromOneSourceWithLastEmittedItemFromSecondSource() {
+        TestObserver<Long> observer = excercise.sumItemsFromOneSourceWithLastEmittedItemFromSecondSource(fasterSource, slowerSource).test();
+
+        scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
+
+        observer.assertResult(101L, 102L, 103L, 104L, 105L, 106L, 107L, 108L, 109L, 110L, 111L);
     }
 
     private Consumer<Notification<Long>> logForSource(int sourceNumber, int period) {
