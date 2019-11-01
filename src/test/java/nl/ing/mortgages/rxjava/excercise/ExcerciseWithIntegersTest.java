@@ -23,4 +23,12 @@ class ExcerciseWithIntegersTest {
         integers = Observables.integers(expectedCount);
         assertEquals(expectedCount, excercise.countNumberOfEvents(integers));
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 10, 20, 50, 100 })
+    void shouldContainOnlyEvenNumbers(int numberOfInputs) {
+        integers = Observables.integers(numberOfInputs);
+        excercise.getEvenNumbers(integers).test().assertValueCount(numberOfInputs / 2);
+        excercise.getEvenNumbers(integers).all(x -> x % 2 == 0).test().assertValue(true);
+    }
 }
