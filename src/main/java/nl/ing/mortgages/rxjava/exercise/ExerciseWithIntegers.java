@@ -1,9 +1,9 @@
-package nl.ing.mortgages.rxjava.excercise;
+package nl.ing.mortgages.rxjava.exercise;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
-public class ExcerciseWithIntegers {
+public class ExerciseWithIntegers {
 
     public long countNumberOfEvents(Observable<Integer> source) {
         return source.count().blockingGet();
@@ -18,7 +18,7 @@ public class ExcerciseWithIntegers {
     }
 
 
-    /** The next excercise is a little bit more intricate. For each integer n in the input, create
+    /** The next exercise is a little bit more intricate. For each integer n in the input, create
      * a sequence of 0..n and output all those sequences as one long sequence.
      *
      * For instance: if the input is [0, 1, 2, 3], the output should be [0, 0,1, 0,1,2, 0,1,2,3]

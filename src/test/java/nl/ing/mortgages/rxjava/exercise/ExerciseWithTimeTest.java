@@ -1,4 +1,4 @@
-package nl.ing.mortgages.rxjava.excercise;
+package nl.ing.mortgages.rxjava.exercise;
 
 import io.reactivex.rxjava3.core.Notification;
 import io.reactivex.rxjava3.core.Observable;
@@ -13,15 +13,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
-class ExcerciseWithTimeTest {
-    private ExcerciseWithTime excercise;
+class ExerciseWithTimeTest {
+    private ExerciseWithTime exercise;
     private Observable<Long> fasterSource;
     private Observable<Long> slowerSource;
     private TestScheduler scheduler;
 
     @BeforeEach
     void setUp() {
-        excercise = new ExcerciseWithTime();
+        exercise = new ExerciseWithTime();
         scheduler = new TestScheduler();
         int fastPeriod = 1;
         int slowPeriod = 3;
@@ -31,7 +31,7 @@ class ExcerciseWithTimeTest {
 
     @Test
     void shouldEmitAllTheItemsOfTheSourceThatReturnsTheFirstResponse() {
-        TestObserver<Long> observer = excercise.getAllItemsFromFirstSourceThatGivesAResponse(fasterSource, slowerSource).test();
+        TestObserver<Long> observer = exercise.getAllItemsFromFirstSourceThatGivesAResponse(fasterSource, slowerSource).test();
 
         scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
 
@@ -40,7 +40,7 @@ class ExcerciseWithTimeTest {
 
     @Test
     void shouldSumItemsWithTheSameIndex() {
-        TestObserver<Long> observer = excercise.sumItemsWithTheSameIndex(fasterSource, slowerSource).test();
+        TestObserver<Long> observer = exercise.sumItemsWithTheSameIndex(fasterSource, slowerSource).test();
 
         scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
 
@@ -49,7 +49,7 @@ class ExcerciseWithTimeTest {
 
     @Test
     void shouldSumLastItemFromOneSourceWithLastEmittedItemFromSecondSource() {
-        TestObserver<Long> observer = excercise.sumItemsFromOneSourceWithLastEmittedItemFromSecondSource(fasterSource, slowerSource).test();
+        TestObserver<Long> observer = exercise.sumItemsFromOneSourceWithLastEmittedItemFromSecondSource(fasterSource, slowerSource).test();
 
         scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
 

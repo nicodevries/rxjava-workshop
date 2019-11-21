@@ -1,10 +1,10 @@
-package nl.ing.mortgages.rxjava.excercise;
+package nl.ing.mortgages.rxjava.exercise;
 
 import io.reactivex.rxjava3.core.Observable;
 
 import java.util.Arrays;
 
-public class ExcerciseWithTime {
+public class ExerciseWithTime {
     /**
      * In order to be able to make more sense out of unit test failure messages I'll describe the behaviour of the two sources:
      * source1 will emit a value every second for 10 seconds: [0,1,2,3,4,5,6,7,8,9]
