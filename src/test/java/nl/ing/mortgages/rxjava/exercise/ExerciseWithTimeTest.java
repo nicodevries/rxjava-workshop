@@ -7,6 +7,8 @@ import io.reactivex.rxjava3.observers.TestObserver;
 import io.reactivex.rxjava3.schedulers.TestScheduler;
 import nl.ing.mortgages.rxjava.Observables;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -29,16 +31,33 @@ class ExerciseWithTimeTest {
         slowerSource = Observables.interval(slowPeriod, scheduler).doOnEach(logForSource(2, slowPeriod)).map(x -> x + 100).take(3).doOnEach(System.out::println);
     }
 
-    @Test
-    void shouldEmitAllTheItemsOfTheSourceThatReturnsTheFirstResponse() {
-        TestObserver<Long> observer = exercise.getAllItemsFromFirstSourceThatGivesAResponse(fasterSource, slowerSource).test();
+    @Nested
+    @DisplayName("Get all the items of the first source to emit one item")
+    class AllFromFirst {
 
-        scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
+        @Test
+        @DisplayName("Test with the values as described in the exercise")
+        void shouldEmitAllTheItemsOfTheSourceThatReturnsTheFirstResponse() {
+            TestObserver<Long> observer = exercise.getAllItemsFromFirstSourceThatGivesAResponse(fasterSource, slowerSource).test();
 
-        observer.assertValueSequence(LongStream.range(0, 10).boxed().collect(Collectors.toList()));
+            scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
+
+            observer.assertValueSequence(LongStream.range(0, 10).boxed().collect(Collectors.toList()));
+        }
+
+        @Test
+        @DisplayName("Test with different values")
+        void shouldEmitAllTheItemsOfTheSourceThatReturnsTheFirstResponse_DifferentValues() {
+            TestObserver<Long> observer = exercise.getAllItemsFromFirstSourceThatGivesAResponse(slowerSource, fasterSource).test();
+
+            scheduler.advanceTimeTo(10, TimeUnit.SECONDS);
+
+            observer.assertValueSequence(LongStream.range(0, 10).boxed().collect(Collectors.toList()));
+        }
     }
 
     @Test
+    @DisplayName("Sum items with the same index")
     void shouldSumItemsWithTheSameIndex() {
         TestObserver<Long> observer = exercise.sumItemsWithTheSameIndex(fasterSource, slowerSource).test();
 
@@ -48,6 +67,7 @@ class ExerciseWithTimeTest {
     }
 
     @Test
+    @DisplayName("Sum last item from one source with last emitted item from second source")
     void shouldSumLastItemFromOneSourceWithLastEmittedItemFromSecondSource() {
         TestObserver<Long> observer = exercise.sumItemsFromOneSourceWithLastEmittedItemFromSecondSource(fasterSource, slowerSource).test();
 
