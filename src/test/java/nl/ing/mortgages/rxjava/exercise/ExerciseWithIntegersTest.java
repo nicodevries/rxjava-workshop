@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExerciseWithIntegersTest {
@@ -18,6 +21,19 @@ class ExerciseWithIntegersTest {
     @BeforeEach
     void setUp() {
         exercise = new ExerciseWithIntegers();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 10, 20, 50, 100 })
+    @DisplayName("Add five to every value")
+    void shouldHave5AddedToEachNumber(int numberOfItems) {
+        integers = Observables.integers(numberOfItems);
+        exercise.addFiveToEachNumber(integers).test()
+                .assertValueSequence(
+                        IntStream.range(5, numberOfItems + 5)
+                                .boxed()
+                                .collect(Collectors.toList())
+                );
     }
 
     @ParameterizedTest

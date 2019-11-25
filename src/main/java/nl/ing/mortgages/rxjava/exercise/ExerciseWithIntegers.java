@@ -5,6 +5,10 @@ import io.reactivex.rxjava3.core.Single;
 
 public class ExerciseWithIntegers {
 
+    public Observable<Integer> addFiveToEachNumber(Observable<Integer> integers) {
+        return integers.map(x -> x + 5);
+    }
+
     public Observable<Integer> getEvenNumbers(Observable<Integer> integers) {
         return integers.filter(x -> x % 2 == 0);
     }
