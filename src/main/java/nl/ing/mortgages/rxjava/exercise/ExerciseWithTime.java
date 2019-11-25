@@ -2,8 +2,6 @@ package nl.ing.mortgages.rxjava.exercise;
 
 import io.reactivex.rxjava3.core.Observable;
 
-import java.util.Arrays;
-
 public class ExerciseWithTime {
     /**
      * In order to be able to make more sense out of unit test failure messages I'll describe the behaviour of the two sources:
@@ -19,7 +17,7 @@ public class ExerciseWithTime {
      *
      */
     public Observable<Long> getAllItemsFromFirstSourceThatGivesAResponse(Observable<Long> source1, Observable<Long> source2) {
-        return Observable.amb(Arrays.asList(source1, source2));
+        return Observable.empty();
     }
 
     /**
@@ -27,7 +25,7 @@ public class ExerciseWithTime {
      * item from source1 with the second item from source2, and so on, until one of the sources stops emitting items
      */
     public Observable<Long> sumItemsWithTheSameIndex(Observable<Long> source1, Observable<Long> source2) {
-        return Observable.zip(source1, source2, Long::sum);
+        return Observable.empty();
     }
 
     /**
@@ -36,6 +34,6 @@ public class ExerciseWithTime {
      * the first item from source2, because the source1 emits three items for every item emitted by source2
      */
     public Observable<Long> sumItemsFromOneSourceWithLastEmittedItemFromSecondSource(Observable<Long> source1, Observable<Long> source2) {
-        return Observable.combineLatest(source1, source2, Long::sum);
+        return Observable.empty();
     }
 }

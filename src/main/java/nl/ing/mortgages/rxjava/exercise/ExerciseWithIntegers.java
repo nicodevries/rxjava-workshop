@@ -6,15 +6,15 @@ import io.reactivex.rxjava3.core.Single;
 public class ExerciseWithIntegers {
 
     public Observable<Integer> addFiveToEachNumber(Observable<Integer> integers) {
-        return integers.map(x -> x + 5);
+        return integers;
     }
 
     public Observable<Integer> getEvenNumbers(Observable<Integer> integers) {
-        return integers.filter(x -> x % 2 == 0);
+        return integers;
     }
 
     public Single<Integer> getSumOfEvenNumbers(Observable<Integer> integers) {
-        return getEvenNumbers(integers).reduce(0, Integer::sum);
+        return Single.never();
     }
 
 
@@ -24,7 +24,7 @@ public class ExerciseWithIntegers {
      * For instance: if the input is [0, 1, 2, 3], the output should be [0, 0,1, 0,1,2, 0,1,2,3]
      */
     public Observable<Integer> getSequenceOfCountingUpToEachInteger(Observable<Integer> integers) {
-       return integers.flatMap(x -> Observable.range(0, x + 1));
+       return integers;
     }
 
     /** In the next exercise you need to do something that goes against the principles of Reactive Extensions:
@@ -32,6 +32,6 @@ public class ExerciseWithIntegers {
      * completed. Usually you only want one of these 'terminal' operators. Don't break the chain!
      */
     public long countNumberOfEvents(Observable<Integer> source) {
-        return source.count().blockingGet();
+        return 0;
     }
 }
